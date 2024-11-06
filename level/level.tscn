@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bu0odl2nvyjop"]
+[gd_scene load_steps=6 format=3 uid="uid://bu0odl2nvyjop"]
 
 [ext_resource type="PackedScene" uid="uid://cs1k22tdf04k4" path="res://player/player.tscn" id="1_w640j"]
+[ext_resource type="PackedScene" uid="uid://d01c8q6jjg1nl" path="res://enemy/enemy.tscn" id="2_d8lcp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_coxpo"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -73,21 +74,25 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 
 operation = 2
 size = Vector3(2.2, 4.25, 6.824)
 
-[node name="SouthWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 11.1)
+[node name="SouthWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 16.1)
 size = Vector3(21, 10, 1)
 
-[node name="NorthWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 42)
+[node name="NorthWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 47)
 size = Vector3(21, 10, 1)
 
-[node name="EastWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4.5, 27)
+[node name="EastWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4.5, 32)
 size = Vector3(1, 10, 31)
 
-[node name="WestWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4.5, 27)
+[node name="WestWallCSGBox3D" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4.5, 32)
 size = Vector3(1, 10, 31)
 
 [node name="Player" parent="." instance=ExtResource("1_w640j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.126717, 0.0395614, 22.8132)
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("2_d8lcp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47494, 0.00100327, 29.4859)
+camera = NodePath("../Player/CameraBase/CameraRot/SpringArm3D/Camera3D")
