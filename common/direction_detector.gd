@@ -16,7 +16,7 @@ static func get_node_facing_relative_to_camera(camera: Camera3D, node: Node3D) -
 	if not camera:
 		return FacingDirection.FRONT
 
-	var camera_front_vector := -camera.global_transform.basis.z
+	var camera_front_vector := camera.global_transform.basis.z
 	var character_front_vector := node.global_transform.basis.z
 
 	var angle_in_degrees := rad_to_deg(
