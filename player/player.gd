@@ -23,6 +23,7 @@ var motion = Vector2()
 @onready var animation_tree = $AnimationTree
 @onready var player_model = $PlayerModel
 @onready var shoot_from = player_model.get_node("Robot_Skeleton/Skeleton3D/GunBone/ShootFrom")
+@onready var sprite_3d: Sprite3D = $Sprite3D
 @onready var crosshair = $Crosshair
 @onready var fire_cooldown = $FireCooldown
 
@@ -31,7 +32,7 @@ var motion = Vector2()
 @onready var sound_effect_land = sound_effects.get_node("Land")
 @onready var sound_effect_shoot = sound_effects.get_node("Shoot")
 
-@export var player_id := 1 :
+@export var player_id := 1:
 	set(value):
 		player_id = value
 		$InputSynchronizer.set_multiplayer_authority(value)
@@ -47,13 +48,37 @@ func _ready():
 
 
 func _physics_process(delta: float):
+	sprite_3d.global_transform.basis = orientation.basis
+	var facing_direction := DirectionDetector.get_node_facing_relative_to_camera(player_input.camera_camera, player_model)
+	sprite_3d.flip_h = false
+	match facing_direction:
+		DirectionDetector.FacingDirection.BACK:
+			sprite_3d.frame_coords.y = 4
+		DirectionDetector.FacingDirection.BACK_LEFT:
+			sprite_3d.frame_coords.y = 3
+		DirectionDetector.FacingDirection.LEFT:
+			sprite_3d.frame_coords.y = 2
+		DirectionDetector.FacingDirection.FRONT_LEFT:
+			sprite_3d.frame_coords.y = 1
+		DirectionDetector.FacingDirection.FRONT_RIGHT:
+			sprite_3d.frame_coords.y = 1
+			sprite_3d.flip_h = true
+		DirectionDetector.FacingDirection.RIGHT:
+			sprite_3d.frame_coords.y = 2
+			sprite_3d.flip_h = true
+		DirectionDetector.FacingDirection.BACK_RIGHT:
+			sprite_3d.frame_coords.y = 3
+			sprite_3d.flip_h = true
+		_:
+			sprite_3d.frame = 0
+
 	if multiplayer.is_server():
 		apply_input(delta)
 	else:
 		animate(current_animation, delta)
 
 
-func animate(anim: int, delta:=0.0):
+func animate(anim: int, delta := 0.0):
 	current_animation = anim
 
 	if anim == ANIMATIONS.JUMP_UP:
@@ -81,7 +106,7 @@ func animate(anim: int, delta:=0.0):
 func apply_input(delta: float):
 	motion = motion.lerp(player_input.motion, MOTION_INTERPOLATE_SPEED * delta)
 
-	var camera_basis : Basis = player_input.get_camera_rotation_basis()
+	var camera_basis: Basis = player_input.get_camera_rotation_basis()
 	var camera_z := camera_basis.z
 	var camera_x := camera_basis.x
 
